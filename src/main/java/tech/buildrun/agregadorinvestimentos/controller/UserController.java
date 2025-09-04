@@ -1,11 +1,13 @@
 package tech.buildrun.agregadorinvestimentos.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import tech.buildrun.agregadorinvestimentos.entity.User;
 import tech.buildrun.agregadorinvestimentos.service.UserService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -27,7 +29,37 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
         //
-        //
-        return null;
+        var user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
+
+    @GetMapping
+    public ResponseEntity<List<User>> listUsers() {
+        //
+        var user = userService.listUsers();
+
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
+                                               @RequestBody UpdateUserDto updateUserDto) {
+        //
+        userService.updateUserById(userId, updateUserDto);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId) {
+        userService.deleteById(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
