@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,6 +34,9 @@ public class User {
     public User() {
 
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Account> accounts;
 
     public User(String password, Instant updateTimestamp, Instant creationTimestamp, String email, String username, UUID userId) {
         this.password = password;
@@ -89,5 +93,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }
